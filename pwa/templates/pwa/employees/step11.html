@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<div class="suggest-guest">
+    {% if obj %}
+        {{obj.name}}
+    {% else %}
+        {% trans "Client no encontrado" %}
+    {% endif %}
+</div>

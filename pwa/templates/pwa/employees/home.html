@@ -1,0 +1,38 @@
+{% extends "pwa-base.html" %}
+{% load static i18n gestion_tags %}
+
+{% block content%}
+Selecciona
+    <div class="my-3 text-center mt-4"><a class="btn btn-success w-50 py-3" href="{% url "pwa-employee-service-step1" %}">
+        <i class="fas fa-book"></i><br/>{% trans "CERTIFICADOS" %}</a></div>
+    <div class="my-3 text-center mt-4"><a class="btn btn-default w-50 py-3" href="" style="background:#ccc">
+        <i class="fas fa-list"></i><br/>{% trans "CONTRATOS" %}</a></div>
+    <div class="my-3 text-center mt-4"><a class="btn btn-default w-50 py-3" href="" style="background:#ccc">
+        <i class="fas fa-print"></i><br/>{% trans "PRESUPUESTOS" %}</a></div>
+
+{%comment%}
+    <div class="my-3 text-center"><a class="btn btn-primary w-100 py-3" href="{% url "pwa-employee-service-new" %}">
+        Nuevo parte</a></div>
+
+    <div class="nav-bar text-center p-2"><strong>PARTES</strong></div>
+    {% for item in obj.services_active %}
+        <div class="card mt-3 p-0"><div class="card-body p-0">
+            <a class="service-status- btn w-100 p-0" href="{% url "pwa-employee-service" item.id %}">
+                <div class="row m-0">
+                    <div class="col-11">
+                        <div class="row">
+                            <div class="col-8 text-start ext-white pt-2"><strong>{{item.service_type.name}}</strong></div>
+                            <div class="col-4 text-end ext-white status-name pt-2"><strong>{{item.infestation.name}}</strong></div>
+                            <div class="col-8 text-start"><small>{{item.client.name}}</small></div>
+                            <div class="col-4 text-end"><small>{{item.client.phone}}</small></div>
+                            <div class="col-12 text-start pt-2"><small>{{item.client.address}}</small></div>
+                        </div>
+                    </div>
+                    <div class="col-1 flap text-center text-white" style="background:{{item.status.color}}">
+                        <i class="fa fa-angle-right"></i></div>
+                </div>
+            </a>
+        </div> </div>
+    {% endfor %}
+{%endcomment%}
+{% endblock %}
