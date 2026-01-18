@@ -1,0 +1,43 @@
+{% load static i18n gestion_tags %}
+
+<div class="underhead">Horario</div>
+<div class="steps-container">
+	<div class="div-steps w-100 m-0">
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active">4</div></div>
+		<div class="column"><div class="circle">5</div></div>
+	</div>
+</div>
+
+<div id="step4" class="row mt-4 m-0">
+    <form class="form m-0" method="POST" action="{% url "pwa-employee-service-step5" %}" id="form-time">
+        {%csrf_token%}
+        <input type="hidden" id="obj" name="obj" value="{{obj.id}}" />
+        <div class="row justify-center m-0" tyle="border:1px solid red">
+	    <div class="col-12 text-instruction greybox-sm p-1">{% trans "Fecha y hora de inicio del tratamiento" %} </div>
+            <div class="col-7">
+                <input type="date" class="form-control" id="ini_date" name="ini_date" 
+                    value="{{obj.ini_date|local_time|date:"Y-m-d"}}"/> 
+            </div>
+            <div class="col-5">
+                <input type="time" class="form-control" id="ini_time" name="ini_time" value="{{obj.ini_date|local_time|date:"H:i"}}"/> 
+            </div>
+	    <br /><br />
+	    <div class="col-12 text-instruction greybox-sm p-1 mt-5">{% trans "Fecha y hora de finalización del tratamiento" %} </div>
+            <div class="col-7"> <div class="">
+                <input type="date" class="form-control" id="end_date" name="end_date"
+                    value="{{obj.end_date|local_time|date:"Y-m-d"}}"/> 
+            </div> </div>
+            <div class="col-5">
+		    <input type="time" class="form-control" id="end_time" name="end_time" value="{{obj.end_date|local_time|date:"H:i"}}"/> 
+            </div>
+	    <br />
+        </div>
+    </form>
+    <div class="d-flex justify-content-end p-2 end-button">
+        <button class="btn btn-success saveform w-100" data-form="form-time" data-target="div-main">
+            {% trans "GUARDAR" %}</button>
+    </div>
+</div>

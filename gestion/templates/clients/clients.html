@@ -5,10 +5,22 @@
     <div class="row toolbar-search p-2 m-0">{% include "clients/clients-search.html" %}</div>
     <div class="content mt-4">
         <div class="toolbar-content p-3">
-	        <h2 class="pathway b-right">
+            <h2 class="pathway b-right">
                 {%trans 'Clientes'%} {#<span id="items-counter" class="badge badge-secondary">{{items|length}}</span>#}</h2>
-            <button type="button" class="btn btn-sm ark new" data-url="{%url "clients-form"%}" data-target-modal="common-modal"> 
-                <i class="fas fa-plus"></i> {% trans 'Nuevo Cliente' %}</button> 
+
+            <button type="button" class="btn btn-sm btn-success ark new btn-act" data-url="{%url "clients-list"%}" 
+                data-target="client-list" data-active="True" 
+                onclick="$('.btn-act').removeClass('btn-success');$(this).addClass('btn-success')"> 
+                <i class="fas fa-eye"></i> {% trans 'Ver Activos' %}</button> 
+            <button type="button" class="btn btn-sm ark new btn-act" data-url="{%url "clients-list"%}" data-target="client-list"
+                data-active="False" onclick="$('.btn-act').removeClass('btn-success');$(this).addClass('btn-success')"> 
+                <i class="fas fa-eye-close"></i> {% trans 'Ver Inactivos' %}</button> 
+            <button type="button" class="btn btn-sm ark new btn-act" data-url="{%url "clients-list"%}" data-target="client-list"
+                data-active="" onclick="$('.btn-act').removeClass('btn-success');$(this).addClass('btn-success')"> 
+                <i class="fas fa-globe"></i> {% trans 'Ver Todos' %}</button> 
+
+            <button type="button" class="btn btn-sm ark new" data-url="{%url "clients-form"%}" 
+                data-target-modal="common-modal"> <i class="fas fa-plus"></i> {% trans 'Nuevo Cliente' %}</button> 
         </div>
         <div id="client-list" class="ml-list">{% include "clients/clients-list.html" %}</div>
     </div>

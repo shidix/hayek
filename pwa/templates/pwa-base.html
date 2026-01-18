@@ -21,26 +21,27 @@
         {#<link rel="stylesheet" href="{% static "css/pwasim.css" %}?v={% random_str %}" type="text/css" /> #}
         <link rel="stylesheet" href="{% static "css/pwa.css" %}" type="text/css" /> 
         <script src="{% static "js/common.js" %}"></script>
+        <script src="{% static 'js/jSignature.min.js' %}"></script>
 	</head>
     <body>
         <div class="container-fluid">
             <div class="header">
                 <div class="row m-0">
                     <div class="col-3 text-end py-1"> <img class="logo" src="{% static 'images/logo-hayek.png' %}"> </div>
-                    <div class="col-4 offset-2 status-bar text-center"><small id="conn-status">...</small> <i class='fas fa-wifi'></i><br />
+                    <div class="col-4 offset-1 status-bar text-center"><small id="conn-status">...</small> <i class='fas fa-wifi'></i><br />
                         <span class="employee-name">{{user.employee.name}} </span> 
                     </div> 
-                    <div class="col-1 offset-1 pt-3">
+                    <div class="col-1 offset-2 pt-3">
                         <strong><a class="btn btn-light btn-sm powericon" href="{% url 'pwa-logout' %}"><i class="fas fa-power-off"></i></a></strong>
                     </div>
                 </div>
             </div>
 
-            <div class="row content align-middle m-0" id="div-content"> {% block content %} {% endblock %} </div>
+            <div class="row content align-middle" id="div-content"> {% block content %} {% endblock %} </div>
 
             {% include "pwa-menu-footer.html" %}
 
-            <div class="footer row w-100 m-0">
+            <div class="footer row w-100">
                 {% block footer %} <div class="col-12 text-center m-0 p-0"> by Shidix Technologies </div> {% endblock %}
             </div>
         </div>

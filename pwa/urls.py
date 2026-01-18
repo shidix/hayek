@@ -14,10 +14,15 @@ urlpatterns = [
 
     path('employee/service/step1/', views.employee_service_step1, name="pwa-employee-service-step1"),
     path('employee/service/step11/', views.employee_service_step11, name="pwa-employee-service-step11"),
+    path('employee/service/step2/', views.employee_service_step2, name="pwa-employee-service-step2"),
+    path('employee/service/step3/', views.employee_service_step3, name="pwa-employee-service-step3"),
+    path('employee/service/step4/', views.employee_service_step4, name="pwa-employee-service-step4"),
+    path('employee/service/step5/', views.employee_service_step5, name="pwa-employee-service-step5"),
+    path('employee/service/step6/', views.employee_service_step6, name="pwa-employee-service-step6"),
 
-    path('employee/service/new/<int:obj_id>/', views.employee_service_new, name="pwa-employee-service-new"),
-    path('employee/service/new/save/', views.employee_service_new_save, name="pwa-employee-service-new-save"),
-    path('employee/service/save/', views.employee_service_save, name="pwa-employee-service-save"),
+    #path('employee/service/new/<int:obj_id>/', views.employee_service_new, name="pwa-employee-service-new"),
+    #path('employee/service/new/save/', views.employee_service_new_save, name="pwa-employee-service-new-save"),
+    #path('employee/service/save/', views.employee_service_save, name="pwa-employee-service-save"),
 
     path('employee/notes/', views.employee_notes, name="pwa-employee-notes"),
     path('employee/note/', views.employee_note, name="pwa-employee-note"),

@@ -1,0 +1,51 @@
+{% load static i18n gestion_tags %}
+
+<div class="underhead">Productos utilizados</div>
+<div class="steps-container">
+	<div class="div-steps w-100 m-0">
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active">3</div></div>
+		<div class="column"><div class="circle">4</div></div>
+		<div class="column"><div class="circle">5</div></div>
+	</div>
+</div>
+
+<div id="step3" class="row mt-4 m-0">
+    <form class="form m-0" method="POST" action="{% url "pwa-employee-service-step4" %}" id="form-bio">
+        {%csrf_token%}
+        <input type="hidden" id="obj" name="obj" value="{{obj.id}}" />
+        <div class="col-12"> <div class="text-instruction greybox-sm p-1"> {% trans "Grupo de Biocidas utilizados" %}
+            <div class="row pt-2">
+            {% for item in biocide_list %}
+                <div class="col-6">
+			<input type="checkbox" class="" id="biocide" name="biocide" value="{{item.id}}"/> <strong>{{item.name}}</strong></div>
+            {% endfor %}
+            </div>
+        </div></div>
+	<br />
+        <div class="col-12"> <div class="text-instruction greybox-sm p-1"> {% trans "Tipos de Biocidas utilizados" %}
+            <div class="row pt-2">
+            {% for item in btype_list %}
+                <div class="col-6">
+                    <input type="checkbox" class="" id="b_type" name="b_type" value="{{item.id}}"/> <strong>{{item.name}}</strong></div>
+            {% endfor %}
+            </div>
+        </div></div>
+	<br />
+        <div class="col-12"> <div class="text-instruction greybox-sm p-1"> {% trans "Categoría máxima de peligrosidad" %}
+            <div class="row pt-2">
+            {% for item in bwarning_list %}
+                <div class="col-6">
+                    <input type="checkbox" class="" id="b_warn" name="b_warn" value="{{item.id}}"/> <strong>{{item.name}}</strong></div>
+            {% endfor %}
+            </div>
+        </div></div>
+	<br />
+    </form>
+    <div class="d-flex justify-content-end p-2 end-button">
+        <button class="btn btn-success saveform w-100" data-form="form-bio" data-target="div-main">
+            {% trans "GUARDAR" %}</button>
+    </div>
+
+</div>

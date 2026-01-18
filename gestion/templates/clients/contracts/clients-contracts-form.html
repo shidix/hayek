@@ -1,0 +1,54 @@
+{% load i18n gestion_tags %}
+
+
+<div class="row modal-head m-0">
+    <div class="col-11"><i class="fa fa-medkit orange"></i>&nbsp; {% trans 'Contrato' %} </div>
+    <div class="col-1">
+        <div class="d-flex justify-content-end"> 
+            <button type="button" class="btn btn-lg" data-bs-dismiss="modal" title="{% trans "Close" %}">
+            <i class="fas fa-times"></i></button> </div>
+    </div>
+</div>
+
+<div id="div-notification"></div>
+
+<form class="form m-0" method="GET" action="{% url "clients-contracts-form-save" %}" id="form-save">
+    {%csrf_token%}
+    <input type="hidden" id="obj_id" name="obj_id" value="{{obj.id}}" />
+    <input type="hidden" id="client_id" name="client_id" value="{{client.id}}" />
+    <div class="row justify-center">
+        <div class="col-3"> <div class="greybox-sm p-1"> {% trans "Código" %}
+            <input type="text" class="form-control" id="code" name="code" value="{{obj.code}}"/> 
+        </div></div>
+
+        <div class="col-3"> <div class="greybox-sm p-1"> {% trans "Fecha inicio" %}
+            <input type="date" class="form-control" id="ini" name="ini" value="{{obj.ini|date:"Y-m-d"}}"/> 
+        </div></div>
+
+        <div class="col-3"> <div class="greybox-sm p-1"> {% trans "Fecha fin" %}
+            <input type="date" class="form-control" id="end" name="end" value="{{obj.end|date:"Y-m-d"}}"/> 
+        </div> </div>
+
+        <div class="col-3"> <div class="greybox-sm p-1"> {% trans "Portacebos" %}
+            <input type="number" class="form-control" id="porta" name="porta" value="{{obj.porta}}"/> 
+        </div></div>
+    </div>
+    {% for item in type_list %}
+        <div class="row justify-center">
+            <div class="col-6"> <div class="greybox-sm p-1"> {% trans "Servicio" %}
+                <input type="text" class="form-control" id="name" name="name" value="{{item.name}}" disabled/> 
+            </div></div>
+
+            <div class="col-6"> <div class="greybox-sm p-1"> {% trans "Número de intervenciones" %}
+                <input type="number" class="form-control" id="service_{{item.id}}" name="service_{{item.id}}" 
+                    value="{{ obj|get_service_val:item }}"/> 
+            </div> </div>
+        </div>
+    {% endfor %}
+
+    <div class="d-flex justify-content-end p-2">
+        <button class="btn btn-primary saveform" data-bs-dismiss="modal" data-form="form-save" data-target="client-contracts-list">
+            {% trans "Guardar" %}</button>
+    </div>
+</form>
+

@@ -8,13 +8,14 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from zoneinfo import ZoneInfo
-from datetime import datetime
+from datetime import datetime, timedelta
 import calendar
 import os, csv
 
 from hayek.decorators import group_required
 from hayek.commons import get_float, get_int, get_or_none, get_param, get_session, set_session, show_exc, generate_qr, csv_export
-from .models import Employee, Client, Service, ServiceType, Infestation, Incident
+from hayek.commons import get_local_date, get_random_str
+from .models import Employee, Client, ClientContract, ClientContractServiceType, Service, ServiceType, Infestation, Incident
 
 CharField.register_lookup(Unaccent)
 ACCESS_PATH="{}/gestion/assistances/client/".format(settings.MAIN_URL)
@@ -23,13 +24,6 @@ ACCESS_PATH="{}/gestion/assistances/client/".format(settings.MAIN_URL)
 def init_session_date(request, key):
     #if not key in request.session:
     set_session(request, key, datetime.now().strftime("%Y-%m-%d"))
-
-def get_local_date(date, time):
-    d = datetime.strptime("{} {}".format(date, time), "%Y-%m-%d %H:%M")
-    d = d.replace(tzinfo=ZoneInfo("Atlantic/Canary"))
-    d = d.astimezone(ZoneInfo("UTC"))
-    return d 
-
 
 '''
     SERVICES
@@ -88,12 +82,20 @@ def services_search(request):
 @group_required("admins",)
 def services_form(request):
     obj = get_or_none(Service, get_param(request.GET, "obj_id"))
+    contract = get_param(request.GET, "contract")
     type_list = ServiceType.objects.all()
     inf_list = Infestation.objects.all()
     client_list = Client.objects.all()
     employee_list = Employee.objects.all()
     print(employee_list)
-    context = {'obj':obj, 'type_list':type_list, 'infestation_list':inf_list, 'client_list':client_list, 'emp_list':employee_list}
+    context = {
+        'obj':obj, 
+        'type_list':type_list, 
+        'infestation_list':inf_list, 
+        'client_list':client_list, 
+        'emp_list':employee_list, 
+        'contract': contract
+    }
     return render(request, "services-form.html", context)
 
 @group_required("admins",)
@@ -110,14 +112,21 @@ def services_form_save(request):
     end_date = get_param(request.GET, "end_date")
     ini_time = get_param(request.GET, "ini_time")
     end_time = get_param(request.GET, "end_time")
+    contract = get_param(request.GET, "contract")
 
     #obj.service_type = s_type
     #obj.status = status
-    obj.ini_date = get_local_date(ini_date, ini_time)
-    obj.end_date = get_local_date(end_date, end_time)
+    try:
+        obj.ini_date = get_local_date(ini_date, ini_time)
+        obj.end_date = get_local_date(end_date, end_time)
+    except:
+        pass
     obj.client = client
     obj.employee = emp
     obj.save()
+
+    if contract != "":
+        return render(request, "clients/contracts/clients-contracts-list.html", {"obj": client})
     return render(request, "services-list.html", {"item_list": get_services(request)})
 
 @group_required("admins",)
@@ -199,14 +208,16 @@ def employees_save_email(request):
 '''
     CLIENTS
 '''
-def get_clients(request):
+def get_clients(request, active="True"):
     search_value = get_session(request, "s_cli_name")
-    filters_to_search = ["name__unaccent__icontains",]
-    full_query = Q()
+    kwargs = {}
     if search_value != "":
-        for myfilter in filters_to_search:
-            full_query |= Q(**{myfilter: search_value})
-    return Client.objects.filter(full_query).order_by("-id")[:50]
+        kwargs["name__unaccent__icontains"] = search_value
+    if active == "True":
+        kwargs["inactive"] = False
+    if active == "False":
+        kwargs["inactive"] = True
+    return Client.objects.filter(**kwargs).order_by("-id")[:50]
 
 @group_required("Administradores",)
 def clients(request):
@@ -214,7 +225,8 @@ def clients(request):
 
 @group_required("Administradores",)
 def clients_list(request):
-    return render(request, "clients/clients-list.html", {"items": get_clients(request)})
+    active = get_param(request.GET, "active")
+    return render(request, "clients/clients-list.html", {"items": get_clients(request, active), "active": active})
 
 @group_required("Administradores",)
 def clients_search(request):
@@ -244,11 +256,84 @@ def clients_remove(request):
     return render(request, "clients/clients-list.html", {"items": get_clients(request)})
 
 @group_required("Administradores",)
-def clients_assistances(request, obj_id):
-    return render(request, "clients/clients-assistances.html", {"obj": get_or_none(Client, obj_id)})
+def clients_services(request, obj_id):
+    return render(request, "clients/clients-services.html", {"obj": get_or_none(Client, obj_id)})
+
+@group_required("Administradores",)
+def clients_contracts(request, obj_id):
+    return render(request, "clients/contracts/clients-contracts.html", {"obj": get_or_none(Client, obj_id)})
+
+@group_required("admins",)
+def clients_contracts_form(request):
+    obj = get_or_none(ClientContract, get_param(request.GET, "obj_id"))
+    client = get_or_none(Client, get_param(request.GET, "client_id"))
+    type_list = ServiceType.objects.all()
+    context = {'obj':obj, 'client': client, 'type_list':type_list,}
+    return render(request, "clients/contracts/clients-contracts-form.html", context)
+
+@group_required("admins",)
+def clients_contracts_form_save(request):
+    obj = get_or_none(ClientContract, get_param(request.GET, "obj_id"))
+    client = get_or_none(Client, get_param(request.GET, "client_id"))
+    if obj == None:
+        obj = ClientContract.objects.create(client=client)
+    obj.code = get_param(request.GET, "code")
+    obj.ini = get_param(request.GET, "ini")
+    obj.end = get_param(request.GET, "end")
+    obj.porta = get_param(request.GET, "porta")
+    obj.save()
+    for key in request.GET.keys():
+        if key.startswith("service"):
+            st_id = key.split("_")[1]
+            st = get_or_none(ServiceType, st_id)
+            val = get_int(get_param(request.GET, key))
+            if val > 0:
+                ccst,created = ClientContractServiceType.objects.get_or_create(contract=obj, service_type=st)
+                ccst.services = val
+                ccst.save()
+                if created:
+                    #print(f'Servicio: {st.name}')
+                    ccst.create_services()
+
+    return render(request, "clients/contracts/clients-contracts-list.html", {"obj": client})
+
+@group_required("Administradores",)
+def clients_contracts_remove(request):
+    obj = get_or_none(ClientContract, request.GET["obj_id"]) if "obj_id" in request.GET else None
+    if obj != None:
+        client = obj.client
+        obj.service_types.all().delete()
+        obj.delete()
+    return render(request, "clients/contracts/clients-contracts-list.html", {"obj": client})
+
+@group_required("admins",)
+def clients_contracts_service_remove(request):
+    obj = get_or_none(Service, request.GET["obj_id"])
+    if obj != None:
+        client = obj.client
+        obj.delete()
+    return render(request, "clients/contracts/clients-contracts-list.html", {"obj": client})
+
+@group_required("Administradores",)
+def clients_contracts_clone(request):
+    obj = get_or_none(ClientContract, request.GET["obj_id"]) if "obj_id" in request.GET else None
+    if obj != None:
+        client = obj.client
+        diff = obj.end - obj.ini
+        #ini = obj.end + timedelta(days=1)
+        ini = obj.end
+        end = obj.end + diff
+        end = end.replace(day=obj.end.day)
+        code = get_random_str(8)
+        new_obj = ClientContract.objects.create(code=code, porta=obj.porta, ini=ini, end=end, client=obj.client)
+        for ccst in obj.service_types.all():
+            new_ccst = ClientContractServiceType.objects.create(services=ccst.services,contract=new_obj,service_type=ccst.service_type)
+            new_ccst.create_services()
+    return render(request, "clients/contracts/clients-contracts-list.html", {"obj": client})
+
 
 '''
-    EMPLOYEES
+    EMPLOYEE
 '''
 @group_required("Administradores",)
 def employee(request, obj_id):

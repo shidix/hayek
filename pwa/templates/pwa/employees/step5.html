@@ -1,0 +1,50 @@
+{% load static i18n gestion_tags %}
+
+<div class="underhead">Firma</div>
+<div class="steps-container">
+	<div class="div-steps w-100 m-0">
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active">5</div></div>
+	</div>
+</div>
+<div id="step5" class="row mt-4 m-0 text-center">
+	<div class="col-12">
+	    <div id="signature"></div>
+	    <button class="btn btn-clear text-center mt-3 w-20" id="reset_signature">Limpiar</button>
+
+	    <div>
+		<form action="{% url "pwa-employee-service-step6" %}" class="form text-center" method="post" id="form-sign">
+		    {% csrf_token %}
+		    <input type="hidden" id="obj" name="obj" value="{{obj.id}}" />
+		    <input type="hidden" value="" name="signature" id="id_signature"/>
+		</form>
+	    </div>
+	 </div>
+
+	 <div class="d-flex justify-content-end end-button p-2 w-100">
+		<button id="btn-save" type="submit" class="submit_btn btn btn-success w-100"> FIRMAR DOCUMENTO </button>
+	</div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var sigdiv = $("#signature").jSignature({ decor: false, height: "150px", width: "300px" });
+        //sigdiv.attr("heigth",240);
+
+        $('#btn-save').on('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            var datapair = sigdiv.jSignature("getData", "svgbase64")
+            img_data=datapair[0] + "," + datapair[1];
+
+            $('#id_signature').val(img_data);
+            $('#form-sign').submit();
+        });
+
+        $('#reset_signature').on('click', function(e){sigdiv.jSignature("reset");});
+    });
+</script>
+

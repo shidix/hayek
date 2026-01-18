@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load i18n static gestion_tags%}
+
+{% block central_content %}
+    <div class="content">
+        <div class="row main-th py-3 m-0">
+            <div class="col-2"> {% trans 'Trabajador/a' %} </div>
+            <div class="col-2"> {% trans 'Inicio' %} </div>
+            <div class="col-2"> {% trans 'Fin' %} </div>
+            <div class="col-2"> {% trans 'Usuario' %} </div>
+            <div class="col-3"> {% trans 'Dirección' %} </div>
+            <div class="col-1"></div>
+        </div>
+
+        {% for item in obj.services.all %}
+            <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
+                <div class="col-2">{{item.employee.name}}</div>
+                <div class="col-2">
+                    <span class="badge bg-success-outline datetime">{{item.ini_date|local_time|date:"d-m-Y H:i"}}</span></div>
+                <div class="col-2">
+                    <span class="badge bg-danger-outline datetime">{{item.end_date|local_time|date:"d-m-Y H:i"}}</span>
+                </div>
+                <div class="col-2">{{item.client.name}}</div>
+                <div class="col-3">{{item.client.address}}</div>
+                <div class="col-1 text-right"> </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock central_content %}

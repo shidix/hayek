@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load i18n static gestion_tags%}
+
+{% block central_content %}
+    <div class="content mt-4">
+        <div class="toolbar-content p-3">
+            <h2 class="pathway b-right"> {%trans 'Contratos'%}: {{obj.name}} </h2>
+            <button type="button" class="btn btn-sm ark new" data-url="{%url "clients-contracts-form"%}" 
+                data-target-modal="common-modal" data-client_id="{{obj.id}}"> 
+                <i class="fas fa-plus"></i> {% trans 'Nuevo Contrato' %}</button> 
+        </div>
+        <div id="client-contracts-list" class="ml-list">{% include "clients/contracts/clients-contracts-list.html" %}</div>
+    </div>
+ 
+    {% include "common-modal.html" %}
+{% endblock central_content %}

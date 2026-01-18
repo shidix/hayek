@@ -1,11 +1,12 @@
 html {
-	background-color: #f9fafb; 
+	background-color: #fff; 
+/*	background-color: #f9fafb; */
 /*	letter-spacing: .0892857143em;*/
 }
 
 body {
 	font-family: Roboto,sans-serif !important;
-	background-color: #f9fafb; 
+/*	background-color: #f9fafb; */
 	font-size: 0.8rem;
 }
 
@@ -213,7 +214,7 @@ button.btn.btn-outline-danger.ark {
     background-color: #fff;
     border-color: #dc3545;
     color: #dc3545;
-    padding: 0.175rem 0.35rem;
+/*    padding: 0.175rem 0.35rem;*/
 }
 
 button.btn.btn-outline-danger.ark:hover {
@@ -301,6 +302,7 @@ i.fas.fa-user.orange,
 i.fas.fa-phone.orange,
 i.fas.fa-envelope.orange,
 i.fas.fa-comments.orange,
+i.fas.fa-code.orange,
 i.fas.fa-map-marker.orange {
 	color: #0000ea;
 }

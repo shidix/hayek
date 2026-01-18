@@ -31,7 +31,13 @@ urlpatterns = [
     path('clients/search', views.clients_search, name='clients-search'),
     path('clients/form', views.clients_form, name='clients-form'),
     path('clients/remove', views.clients_remove, name='clients-remove'),
-    path('clients/assistances/<int:obj_id>', views.clients_assistances, name='clients-assistances'),
+    path('clients/services/<int:obj_id>', views.clients_services, name='clients-services'),
+    path('clients/contracts/<int:obj_id>', views.clients_contracts, name='clients-contracts'),
+    path('clients/contracts/form', views.clients_contracts_form, name='clients-contracts-form'),
+    path('clients/contracts/form-save', views.clients_contracts_form_save, name='clients-contracts-form-save'),
+    path('clients/contracts/remove', views.clients_contracts_remove, name='clients-contracts-remove'),
+    path('clients/contracts/service-remove', views.clients_contracts_service_remove, name='clients-contracts-service-remove'),
+    path('clients/contracts/clone', views.clients_contracts_clone, name='clients-contracts-clone'),
 
     #---------------------- INCIDENTS -----------------------
     path('incidents', views.incidents, name='incidents'),

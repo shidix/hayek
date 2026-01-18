@@ -26,6 +26,10 @@ def random_str(nchars='128'):
 def addstr(arg1,arg2):
     return(mark_safe(str(arg1)+str(arg2)))
 
+@register.filter
+def get_service_val(obj, service):
+    return 0 if obj == None else obj.get_service_value(service)
+
 '''
     Simple Tags
 '''

@@ -1,0 +1,45 @@
+{% load i18n gestion_tags %}
+
+<div class="toolbar-jobs p-3">
+    <h2><i class="fas fa-user orange"></i> {{obj.name}}</h2>
+    {%comment%}
+    <a class="btn btn-sm new" onclick="$('#step1').toggle()">
+        <i class="fas fa-plus"></i> <small>{%trans "Añadir Trabajo"%}</small></a>
+    {%endcomment%}
+</div>
+
+{%comment%}
+<div id="step1" class="hide">
+    <input class="form-control input autocomplete" id="client" name="client" placeholder="{% trans "Nombre cliente" %}" 
+        value="" data-url="{% url "employee-search-client" %}" data-target="client-search-list" data-obj_id="{{obj.id}}" 
+        data-show="client-list"/>
+    <div id="client-search-list"></div>
+</div>
+<div id="step2" class="hide"> {% include "employee/timetable-form.html" %} </div>
+{%endcomment%}
+
+<div class="row mt-3">
+    <div class="row main-th py-3 m-0">
+        <div class="col-2"> {% trans 'Trabajador/a' %} </div>
+        <div class="col-2"> {% trans 'Inicio' %} </div>
+        <div class="col-2"> {% trans 'Fin' %} </div>
+        <div class="col-2"> {% trans 'Usuario' %} </div>
+        <div class="col-3"> {% trans 'Dirección' %} </div>
+        <div class="col-1"></div>
+    </div>
+
+    {% for item in obj.services.all %}
+        <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
+            <div class="col-2">{{item.employee.name}}</div>
+            <div class="col-2">
+                <span class="badge bg-success-outline datetime">{{item.ini_date|local_time|date:"d-m-Y H:i"}}</span></div>
+            <div class="col-2">
+                <span class="badge bg-danger-outline datetime">{{item.end_date|local_time|date:"d-m-Y H:i"}}</span>
+            </div>
+            <div class="col-2">{{item.client.name}}</div>
+            <div class="col-3">{{item.client.address}}</div>
+            <div class="col-1 text-right"> </div>
+        </div>
+    {% endfor %}
+</div>
+

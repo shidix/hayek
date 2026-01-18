@@ -1,9 +1,11 @@
 {% load i18n %}
 
-<div class="suggest-guest">
-    {% if obj %}
-        {{obj.name}}
+<div class="suggest-guest text-center">
+    {% if client %}
+    	<div class="client-founded mt-5">{{client.name}}</div>
+        <button class="btn btn-default text-success ark" data-url="{% url "pwa-employee-service-step2" %}" data-target="div-main" 
+	   data-obj_id="{{client.id}}"> <strong>{% trans "Seleccionar" %} </strong><i class="fa fa-check"></i></button>
     {% else %}
-        {% trans "Client no encontrado" %}
+    	<div class="alert alert-warning mt-2">{% trans "Cliente no encontrado" %}</div>
     {% endif %}
 </div>

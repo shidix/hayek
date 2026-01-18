@@ -1,16 +1,30 @@
-{% extends "pwa-base.html" %}
+{#{% extends "pwa-base.html" %}#}
 {% load static i18n gestion_tags %}
 
-{% block content%}
-    <div id="step1" class="mt-4">
-        <div class="row">
-            <div class="col-10">
-                <input class="form-control input ark_change" id="client" name="client" placeholder="{% trans "Nombre cliente" %}" 
-                    value="" data-url="{% url "pwa-employee-service-step11" %}" data-target="client-info" 
-                    data-obj_id="{{obj.id}}"/>
-            </div>
-            <div class="col-2"><i class="fas fa-search"></i> </div>
-        </div>
-    </div>
-    <div id="client-info"></div>
-{% endblock %}
+{#{% block content%}#}
+
+<div class="underhead">Datos del cliente</div>
+<div class="steps-container">
+	<div class="div-steps w-100 m-0">
+		<div class="column"><div class="circle active">1</div></div>
+		<div class="column"><div class="circle">2</div></div>
+		<div class="column"><div class="circle">3</div></div>
+		<div class="column"><div class="circle">4</div></div>
+		<div class="column"><div class="circle">5</div></div>
+	</div>
+</div>
+<div id="step1" class="mt-4">
+	<div class="row m-0 p-0">
+		<div class="col-12 text-instruction text-center mb-2">Introduce el DNI/CIF del cliente</div>
+		<div class="col-10">
+			<input class="form-control input ark_change" id="code" name="code" placeholder="{% trans "NIF / CIF" %}" 
+				value="" data-url="{% url "pwa-employee-service-step11" %}" data-target="client-info" data-obj_id=""/>
+		</div>
+		<div class="col-2 text-center">
+			<button class="btn btn-search w-100" data-form="form-search" data-target="client-list"><i class="fas fa-search"></i></button>
+		</div>
+	</div>
+</div>
+<div id="client-info"></div>
+
+{#{% endblock %}#}

@@ -162,4 +162,10 @@ def csv_export(header, values, file_name="csv_file"):
     except Exception as e:
         return HttpResponse("Error: {}".format(e))
 
+def get_local_date(date, time):
+    d = datetime.strptime("{} {}".format(date, time), "%Y-%m-%d %H:%M")
+    d = d.replace(tzinfo=ZoneInfo("Atlantic/Canary"))
+    d = d.astimezone(ZoneInfo("UTC"))
+    return d 
+
 

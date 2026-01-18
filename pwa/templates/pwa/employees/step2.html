@@ -1,0 +1,48 @@
+{% load static i18n gestion_tags %}
+
+<div class="underhead">Datos del tratamiento</div>
+<div class="steps-container">
+	<div class="div-steps w-100 m-0">
+		<div class="column"><div class="circle active"><i class="fa fa-check"></i></div></div>
+		<div class="column"><div class="circle active">2</div></div>
+		<div class="column"><div class="circle">3</div></div>
+		<div class="column"><div class="circle">4</div></div>
+		<div class="column"><div class="circle">5</div></div>
+	</div>
+</div>
+<div id="step2" class="row mt-3 m-0">
+    <form class="form m-0" method="POST" action="{% url "pwa-employee-service-step3" %}" id="form-save">
+        {%csrf_token%}
+        <input type="hidden" id="client" name="client" value="{{client.id}}" />
+        <div class="col-12"> <div class="text-instruction greybox-sm p-1"> {% trans "Tipo de servicio" %}
+            <select class="form-control" id="type" name="type"> 
+                <option value="">{% trans "-- Seleccione un servicio --" %}</option>
+                {% for type in type_list %}
+                    <option value="{{type.id}}">{{type.name}}</option>
+                {% endfor %}
+            </select>
+        </div></div>
+	<br />
+        <div class="col-12"> <div class="text-instruction greybox-sm p-1"> {% trans "Agente a combatir" %}
+            <select class="form-control" id="infestation" name="infestation"> 
+                <option value="">{% trans "-- Seleccione un agente --" %}</option>
+                {% for inf in inf_list %}
+                    <option value="{{inf.id}}">{{inf.name}}</option>
+                {% endfor %}
+            </select>
+        </div></div>
+	<br />
+        <div class="col-12"> <div class="text-instruction greybox-sm p-1"> {% trans "Descripción del lugar de trabajo" %}
+            <textarea class="form-control" id="place_notes" name="place_notes" rows="4"></textarea> 
+        </div></div>
+	<br />
+        <div class="col-12"> <div class="text-instruction greybox-sm p-1"> {% trans "Estado limpieza y defectos estructurales" %}
+            <textarea class="form-control" id="clean_notes" name="clean_notes" rows="4"></textarea> 
+        </div></div>
+    </form>
+	<br />
+    <div class="d-flex justify-content-end p-2 end-button">
+        <button class="btn btn-success saveform w-100" data-form="form-save" data-target="div-main">
+            {% trans "GUARDAR" %}</button>
+    </div>
+</div>

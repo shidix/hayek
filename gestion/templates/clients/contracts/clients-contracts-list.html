@@ -1,0 +1,78 @@
+{% load i18n static gestion_tags%}
+
+{% for item in obj.contracts.all %}
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-4"> {% trans 'Código' %}: {{item.code}} </div>
+                <div class="col-2"> {% trans 'Inicio' %}: {{item.ini|date:"d-m-Y"}} </div>
+                <div class="col-2"> {% trans 'Fin' %}: {{item.end|date:"d-m-Y"}} </div>
+                <div class="col-2"> {% trans 'Portacebos' %}: {{item.porta}} </div>
+                <div class="col-2 text-right"> 
+                    <a class="btn btn-xs ark" data-url="{% url "clients-contracts-clone" %}" data-target="client-contracts-list" 
+                        data-obj_id="{{item.id}}" title="{% trans 'Clonar' %}" 
+                        data-confirm="{% trans "Are you sure to clone this element?" %}"><i class="fas fa-clone"></i></a> 
+                    <a class="btn btn-xs ark" data-url="{% url "clients-contracts-form" %}" data-target-modal="common-modal" 
+                        data-obj_id="{{item.id}}" data-client_id="{{obj.id}}" title="{% trans 'Editar' %}">
+                        <i class="fas fa-edit"></i></a> 
+                    <a class="btn btn-xs ark" data-url="{% url "clients-contracts-remove" %}" data-target="client-contracts-list" 
+                        data-obj_id="{{item.id}}" title="{% trans 'Borrar' %}" 
+                        data-confirm="{% trans "Are you sure to remove this element?" %}"><i class="fas fa-trash"></i></a> 
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            {% for ser in item.service_types.all %}
+                <strong>{{ser.service_type.name}} ({{ser.services}})</strong><br/>
+                {% for s in ser.get_services %}
+                    <div class="row">
+                        <div class="col-3"> {% trans 'Empleado' %}: {{s.employee.name|default:""}} </div>
+                        <div class="col-3"> {% trans 'Fecha de inicio' %}: {{s.ini_date|date:"d-m-Y"}} </div>
+                        <div class="col-3"> {% trans 'Fecha de fin' %}: {{s.end_date|date:"d-m-Y"}} </div>
+                        <div class="col-3"> 
+                            <a class="btn btn-xs ark" data-url="{% url "services-form" %}" data-target-modal="common-modal" 
+                                data-obj_id="{{s.id}}" data-contract="True" title="{%trans 'Editar'%}"><i class="fas fa-edit"></i></a> 
+                            <a class="btn btn-xs ark" data-url="{% url "clients-contracts-service-remove" %}" 
+                                data-target="client-contracts-list" data-obj_id="{{s.id}}" title="{% trans 'Borrar' %}" 
+                                data-confirm="{% trans "Are you sure to remove this element?" %}"> <i class="fas fa-trash"></i></a> 
+ 
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+
+{%comment%}
+<div class="content">
+    <div class="row main-th py-3 m-0">
+        <div class="col-3"> {% trans 'Inicio' %} </div>
+        <div class="col-3"> {% trans 'Fin' %} </div>
+        <div class="col-4"> {% trans 'Servicios' %} </div>
+        <div class="col-2"></div>
+    </div>
+
+    {% for item in obj.contracts.all %}
+        <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
+            <div class="col-3">
+                <span class="badge bg-success-outline datetime">{{item.ini|date:"d-m-Y"}}</span></div>
+            <div class="col-3">
+                <span class="badge bg-danger-outline datetime">{{item.end|date:"d-m-Y"}}</span> </div>
+            <div class="col-4">
+                {% for ser in item.service_types.all %}
+                    {{ser.service_type.name}} - {{ser.services}}<br/>
+                {% endfor %}
+            </div>
+            <div class="col-2 text-right"> 
+                <a class="btn btn-xs ark" data-url="{% url "clients-contracts-form" %}" data-target-modal="common-modal" 
+                    data-obj_id="{{item.id}}" data-client_id="{{obj.id}}" title="{% trans 'Editar' %}"><i class="fas fa-edit"></i></a> 
+                <a class="btn btn-xs ark" data-url="{% url "clients-contracts-remove" %}" data-target="client-contracts-list" 
+                    data-obj_id="{{item.id}}" title="{% trans 'Borrar' %}" 
+                    data-confirm="{% trans "Are you sure to remove this element?" %}"><i class="fas fa-trash"></i></a> 
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{%endcomment%}
+
